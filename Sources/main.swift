@@ -10,12 +10,8 @@ import Foundation
 
 // Environment variable loading
 func loadEnvironmentVariables() {
-    let fileManager = FileManager.default
-    let currentDirectory = fileManager.currentDirectoryPath
-    let envPath = "\(currentDirectory)/.env"
-    
-    guard fileManager.fileExists(atPath: envPath),
-          let envContent = try? String(contentsOfFile: envPath) else {
+    guard let envURL = AppSupportPaths.firstExistingConfigFile(named: ".env"),
+          let envContent = try? String(contentsOf: envURL) else {
         return
     }
     
@@ -104,7 +100,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, AudioTranscriptionManagerDel
         statusItem.menu = menu
         
         // Set default keyboard shortcuts
-        KeyboardShortcuts.setShortcut(.init(.z, modifiers: [.command, .option]), for: .startRecording)
+        KeyboardShortcuts.setShortcut(.init(.v, modifiers: [.command, .shift]), for: .startRecording)
         KeyboardShortcuts.setShortcut(.init(.x, modifiers: [.command, .option]), for: .geminiAudioRecording)
         KeyboardShortcuts.setShortcut(.init(.a, modifiers: [.command, .option]), for: .showHistory)
         KeyboardShortcuts.setShortcut(.init(.s, modifiers: [.command, .option]), for: .readSelectedText)

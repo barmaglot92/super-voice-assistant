@@ -11,18 +11,13 @@ class TextReplacements {
 
     private var config: ReplacementsConfig = .empty
 
-    private var configFileURL: URL {
-        let currentDirectory = FileManager.default.currentDirectoryPath
-        return URL(fileURLWithPath: currentDirectory).appendingPathComponent("config.json")
-    }
-
     private init() {
         loadConfig()
     }
 
     private func loadConfig() {
-        guard FileManager.default.fileExists(atPath: configFileURL.path) else {
-            print("No config file found at \(configFileURL.path)")
+        guard let configFileURL = AppSupportPaths.firstExistingConfigFile(named: "config.json") else {
+            print("No config file found in Application Support, app bundle, or current directory")
             return
         }
 
